@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: funpay_php
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - funpay-network
+
+  mysql:
+    image: mysql:8
+    restart: on-failure
+    container_name: funpay_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: funpay_test
+      MYSQL_DATABASE: funpay_test
+      MYSQL_USER: funpay_test
+      MYSQL_PASSWORD: funpay_test
+    ports:
+      - "3316:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - funpay-network
+
+  nginx:
+    image: nginx:latest
+    container_name: funpay_nginx
+    ports:
+      - "8010:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./:/var/www/html
+    networks:
+      - funpay-network
+    depends_on:
+      - php
+      - mysql
+
+networks:
+  funpay-network:
+    driver: bridge
