@@ -76,7 +76,6 @@ class Database implements DatabaseInterface
      */
     private function removeUnnecessaryBrackets(string $query): string
     {
-        preg_match_all("/(?<!')\{([^'}]+)(?<!')\}(?!')/", $query);
         return preg_replace_callback("/(?<!')\{([^'}]+)(?<!')\}(?!')/", function ($match) {
             return $match[1];
         }, $query);
