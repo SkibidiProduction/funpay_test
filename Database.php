@@ -87,7 +87,7 @@ class Database implements DatabaseInterface
      * @param string $query
      * @return string
      */
-    public function quoteQueryParameters(string $query): string
+    private function quoteQueryParameters(string $query): string
     {
         return preg_replace('/=(\s*)`([^`]+)`/', "=\\1'$2'", $query);
     }
